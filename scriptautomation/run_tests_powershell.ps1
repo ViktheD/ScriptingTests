@@ -4,17 +4,9 @@ function Test-Command {
     $null = Get-Command $Command -ErrorAction SilentlyContinue
 }
 
-# Check if Chocolatey is properly installed
-if (-not (Test-Command "choco") -or -not (Test-Path "C:\ProgramData\chocolatey\choco.exe")) {
-    # Chocolatey is not properly installed or directory does not exist, attempt installation
-    Write-Host "Chocolatey is not installed or not properly installed. Installing Chocolatey..."
-
-    # Check if the directory exists, if so, delete it
-    if (Test-Path "C:\ProgramData\chocolatey") {
-        Write-Host "Deleting existing Chocolatey installation directory..."
-        Remove-Item -Path "C:\ProgramData\chocolatey" -Recurse -Force
-    }
-
+# Check if Chocolatey is installed
+if (-not (Test-Command "choco")) {
+    Write-Host "Chocolatey is not installed. Installing Chocolatey..."
     # Install Chocolatey using PowerShell script from Chocolatey website
     Set-ExecutionPolicy Bypass -Scope Process -Force
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -37,17 +29,23 @@ else {
     Write-Host "Git is already installed."
 }
 
-# Clone the repository
-Write-Host "Cloning repository..."
-git clone https://github.com/ViktheD/ScriptingTests
-if ($LastExitCode -ne 0) {
-    Write-Host "Failed to clone repository. Please check the repository URL and try again."
-    pause
-    exit 1
+# Clone the repository if it doesn't already exist
+$repositoryDirectory = "ScriptingTests"
+if (-not (Test-Path $repositoryDirectory)) {
+    Write-Host "Cloning repository..."
+    git clone https://github.com/ViktheD/ScriptingTests
+    if ($LastExitCode -ne 0) {
+        Write-Host "Failed to clone repository. Please check the repository URL and try again."
+        pause
+        exit 1
+    }
+}
+else {
+    Write-Host "Repository already exists."
 }
 
 # Navigate to the repository directory
-cd ScriptingTests
+cd $repositoryDirectory
 if ($LastExitCode -ne 0) {
     Write-Host "Failed to navigate to the repository directory. Please check if the repository was cloned successfully."
     pause
