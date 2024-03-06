@@ -4,9 +4,17 @@ function Test-Command {
     $null = Get-Command $Command -ErrorAction SilentlyContinue
 }
 
-# Check if Chocolatey is installed
-if (-not (Test-Command "choco")) {
-    Write-Host "Chocolatey is not installed. Installing Chocolatey..."
+# Check if Chocolatey is properly installed
+if (-not (Test-Command "choco") -or -not (Test-Path "C:\ProgramData\chocolatey\choco.exe")) {
+    # Chocolatey is not properly installed or directory does not exist, attempt installation
+    Write-Host "Chocolatey is not installed or not properly installed. Installing Chocolatey..."
+
+    # Check if the directory exists, if so, delete it
+    if (Test-Path "C:\ProgramData\chocolatey") {
+        Write-Host "Deleting existing Chocolatey installation directory..."
+        Remove-Item -Path "C:\ProgramData\chocolatey" -Recurse -Force
+    }
+
     # Install Chocolatey using PowerShell script from Chocolatey website
     Set-ExecutionPolicy Bypass -Scope Process -Force
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
