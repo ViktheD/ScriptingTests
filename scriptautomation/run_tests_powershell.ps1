@@ -30,19 +30,14 @@ else {
     Write-Host "Git is already installed."
 }
 
-# Clone the repository if it doesn't already exist
-$repositoryDirectory = "ScriptingTests"
+# Prompt user for the repository directory
+$repositoryDirectory = Read-Host "Enter the path to the repository directory (e.g., C:\path\to\repository)"
+
+# Check if the repository directory exists
 if (-not (Test-Path $repositoryDirectory)) {
-    Write-Host "Cloning repository..."
-    git clone https://github.com/ViktheD/ScriptingTests
-    if ($LastExitCode -ne 0) {
-        Write-Host "Failed to clone repository. Please check the repository URL and try again."
-        pause
-        exit 1
-    }
-}
-else {
-    Write-Host "Repository already exists."
+    Write-Host "The specified repository directory does not exist."
+    pause
+    exit 1
 }
 
 # Navigate to the repository directory
