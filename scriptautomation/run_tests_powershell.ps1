@@ -72,9 +72,27 @@ Write-Host "Updating Node.js and Playwright to the latest versions..."
 npm install -g npm@latest   # Update npm to the latest version
 npm install -g playwright@latest
 
-# Check if the local reporistory is up to date with the remote repository's main branch
+# Check if the local repository is up to date with the remote repository's main branch
 Write-Host "Checking if the repository is up to date..."
-git pull origin main
+$gitOutput = git pull origin main
+
+# Check if there were any updates
+if ($gitOutput -match "Updating") {
+    Write-Host "New updates were found in the repository."
+    $restartScript = Read-Host "Do you want to restart the script to apply the updates? (Y/N)"
+    
+    if ($restartScript -eq "Y" -or $restartScript -eq "y") {
+        Write-Host "Restarting the script..."
+        & $MyInvocation.MyCommand.Path
+        exit
+    }
+    else {
+        Write-Host "Continuing script execution without applying updates."
+    }
+}
+else {
+    Write-Host "The repository is up to date."
+}
 
 # Install project dependencies
 Write-Host "Installing project dependencies..."
@@ -82,8 +100,6 @@ Write-Host "Installing project dependencies..."
 npm i -D @playwright/test #installs modules
 npx playwright install   #installs browsers
 
-# Run Playwright tests
-Write-Host "Preparing Playwright tests..."
 # Prompt user to choose how to run tests
 $testOption = Read-Host "Do you want to run all tests or a specific test? (Type 'all' or 'specific')"
 
