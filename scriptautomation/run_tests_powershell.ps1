@@ -72,6 +72,10 @@ Write-Host "Updating Node.js and Playwright to the latest versions..."
 npm install -g npm@latest   # Update npm to the latest version
 npm install -g playwright@latest
 
+# Check if the local reporistory is up to date with the remote repository's main branch
+Write-Host "Checking if the repository is up to date..."
+git pull origin main
+
 # Install project dependencies
 Write-Host "Installing project dependencies..."
 # if there are any, use npm install
