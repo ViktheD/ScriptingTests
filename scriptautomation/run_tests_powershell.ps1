@@ -5,7 +5,8 @@ function Test-Command {
 }
 
 # Check if Chocolatey is installed
-if (-not (Test-Command "choco")) {
+$chocoExecutablePath = "C:\ProgramData\chocolatey\bin\choco.exe"
+if (-not (Test-Path $chocoExecutablePath)) {
     Write-Host "Chocolatey is not installed. Installing Chocolatey..."
     # Install Chocolatey using PowerShell script from Chocolatey website
     Set-ExecutionPolicy Bypass -Scope Process -Force
