@@ -118,7 +118,7 @@ elseif ($testOption -eq "specific") {
     # Prompt user to choose which test to run
     $selectedTest = $null
     while (-not $selectedTest) {
-        $selectedTest = Read-Host "Enter the name of the test you want to run (e.g., 'has title', 'enclose in quotes')"
+        $selectedTest = Read-Host "Enter the name of the test you want to run (e.g., 'firstTest', 'seconTest')"
         $testExists = npm test -- --list | Select-String -Pattern $selectedTest
 
         if (-not $testExists) {
