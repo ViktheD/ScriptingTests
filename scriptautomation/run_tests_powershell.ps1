@@ -83,10 +83,36 @@ npm i -D @playwright/test #installs modules
 npx playwright install   #installs browsers
 
 # Run Playwright tests
-Write-Host "Running Playwright tests..."
-npm test
-if ($LastExitCode -ne 0) {
-    Write-Host "Failed to run Playwright tests."
+Write-Host "Preparing Playwright tests..."
+# Prompt user to choose how to run tests
+$testOption = Read-Host "Do you want to run all tests or a specific test? (Type 'all' or 'specific')"
+
+# Run Playwright tests based on user's choice
+if ($testOption -eq "all") {
+    # Run all tests
+    Write-Host "Running all Playwright tests..."
+    npm test
+    if ($LastExitCode -ne 0) {
+        Write-Host "Failed to run Playwright tests."
+        pause
+        exit 1
+    }
+}
+elseif ($testOption -eq "specific") {
+    # Prompt user to choose which test to run
+    $selectedTest = Read-Host "Enter the name of the test you want to run (e.g., 'has title', 'get started link')"
+
+    # Run the selected test
+    Write-Host "Running Playwright test: $selectedTest..."
+    npm test -- --filter="$selectedTest"
+    if ($LastExitCode -ne 0) {
+        Write-Host "Failed to run Playwright test: $selectedTest."
+        pause
+        exit 1
+    }
+}
+else {
+    Write-Host "Invalid option. Please choose 'all' or 'specific'."
     pause
     exit 1
 }
