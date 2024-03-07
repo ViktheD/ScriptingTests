@@ -77,6 +77,7 @@ Write-Host "Installing project dependencies..."
 # if there are any, use npm install
 npm install -g http-server
 npm i -D @playwright/test
+npx playwright install
 
 # Run Playwright tests
 Write-Host "Running Playwright tests..."
