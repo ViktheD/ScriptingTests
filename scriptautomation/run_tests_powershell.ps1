@@ -129,7 +129,7 @@ elseif ($testOption -eq "specific") {
 
     # Run the selected test
     Write-Host "Running Playwright test: $selectedTest..."
-    npm test -- --filter="$selectedTest"
+    npx playwright test "$selectedTest.spec.ts"
     if ($LastExitCode -ne 0) {
         Write-Host "Failed to run Playwright test: $selectedTest."
         pause
