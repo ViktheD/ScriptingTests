@@ -75,9 +75,8 @@ npm install -g playwright@latest
 # Install project dependencies
 Write-Host "Installing project dependencies..."
 # if there are any, use npm install
-npm install -g http-server
-npm i -D @playwright/test
-npx playwright install
+npm i -D @playwright/test #installs modules
+npx playwright install   #installs browsers
 
 # Run Playwright tests
 Write-Host "Running Playwright tests..."
@@ -88,14 +87,9 @@ if ($LastExitCode -ne 0) {
     exit 1
 }
 
-# Start a HTTP server to serve test results
-Write-Host "Starting a HTTP server..."
-http-server -p 8000
-if ($LastExitCode -ne 0) {
-    Write-Host "Failed to start HTTP server."
-    pause
-    exit 1
-}
+# Display HTML report
+Write-Host "Opening test results HTML report..."
+npx playwright show-report
 
 # Add pause to prevent the PowerShell window from closing automatically
 pause
