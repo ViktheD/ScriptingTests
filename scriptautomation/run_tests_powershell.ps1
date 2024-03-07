@@ -116,23 +116,20 @@ if ($testOption -eq "all") {
 }
 elseif ($testOption -eq "specific") {
     # Prompt user to choose which test to run
-    $selectedTest = Read-Host "Enter the name of the test you want to run (e.g., 'has title', 'get started link')"
+    do {
+        $selectedTest = Read-Host "Enter the name of the test you want to run (e.g., 'has title', 'get started link')"
+        $testExists = npm test -- --list | Select-String -Pattern $selectedTest
 
-    # Check if the selected test exists
-    $testExists = npm test -- --list | Select-String -Pattern $selectedTest
-
-    if ($testExists) {
-        # Run the selected test
-        Write-Host "Running Playwright test: $selectedTest..."
-        npm test -- --filter="$selectedTest"
-        if ($LastExitCode -ne 0) {
-            Write-Host "Failed to run Playwright test: $selectedTest."
-            pause
-            exit 1
+        if (-not $testExists) {
+            Write-Host "No test with the name '$selectedTest' found. Please try again."
         }
-    }
-    else {
-        Write-Host "No test with the name '$selectedTest' found. Please try again."
+    } until ($testExists)
+
+    # Run the selected test
+    Write-Host "Running Playwright test: $selectedTest..."
+    npm test -- --filter="$selectedTest"
+    if ($LastExitCode -ne 0) {
+        Write-Host "Failed to run Playwright test: $selectedTest."
         pause
         exit 1
     }
